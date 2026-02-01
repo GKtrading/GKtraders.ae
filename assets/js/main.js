@@ -112,10 +112,13 @@
     }, { passive: true });
 
     // --------------------------------------------------------------------------
-    // Contact Form Handling
+    // Contact Form Handling - Telegram Integration
     // --------------------------------------------------------------------------
+    const TELEGRAM_BOT_TOKEN = '8572888070:AAG11DBzBOUeYpq-kIzfGosXrBI-r_QuR2Q';
+    const TELEGRAM_CHAT_ID = '-5276039618';
+
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
@@ -130,24 +133,47 @@
             submitBtn.textContent = 'Sending...';
             submitBtn.disabled = true;
 
-            // Simulate form submission (replace with actual endpoint)
+            // Format message for Telegram
+            const message = `
+🔔 *New SCO Request*
+
+👤 *Name:* ${data.name}
+🏢 *Company:* ${data.company}
+📧 *Email:* ${data.email}
+📦 *Volume:* ${data.volume} MT
+
+💬 *Details:*
+${data.message || 'No additional details'}
+
+---
+_Sent from GKtraders.ae_
+            `.trim();
+
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                if (response.ok) {
+                    this.reset();
+                    submitBtn.textContent = 'Request Sent!';
+                } else {
+                    submitBtn.textContent = 'Error. Try again.';
+                }
+            } catch (error) {
+                submitBtn.textContent = 'Error. Try again.';
+            }
+
             setTimeout(() => {
-                // Reset form
-                this.reset();
-                submitBtn.textContent = 'Request Sent!';
-
-                setTimeout(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }, 2000);
-
-                // In production, send data to server:
-                // fetch('/api/contact', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(data)
-                // });
-            }, 1000);
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
         });
     }
 
