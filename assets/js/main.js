@@ -214,6 +214,68 @@ _Sent from GKtraders.ae_
         if (e.key === 'Escape' && nav.classList.contains('active')) {
             closeNav();
         }
+        // Close modal on Escape
+        if (e.key === 'Escape' && procedureModal && procedureModal.classList.contains('active')) {
+            closeModal();
+        }
     });
+
+    // --------------------------------------------------------------------------
+    // Procedure Modal
+    // --------------------------------------------------------------------------
+    const procedureModal = document.querySelector('#procedureModal');
+    const openProcedureBtn = document.querySelector('#openProcedure');
+    const openProcedureWorkflowBtn = document.querySelector('#openProcedureWorkflow');
+    const procedureLink = document.querySelector('#procedureLink');
+    const closeModalBtn = document.querySelector('#closeModal');
+
+    function openModal() {
+        if (procedureModal) {
+            procedureModal.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+    }
+
+    function closeModal() {
+        if (procedureModal) {
+            procedureModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+    }
+
+    if (openProcedureBtn) {
+        openProcedureBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+    }
+
+    if (openProcedureWorkflowBtn) {
+        openProcedureWorkflowBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+    }
+
+    if (procedureLink) {
+        procedureLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeNav();
+            openModal();
+        });
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+
+    // Close modal on overlay click
+    if (procedureModal) {
+        procedureModal.addEventListener('click', (e) => {
+            if (e.target === procedureModal) {
+                closeModal();
+            }
+        });
+    }
 
 })();

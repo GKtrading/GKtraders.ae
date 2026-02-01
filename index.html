@@ -7,7 +7,7 @@
     <title>GeekTraders | Bulk Diesel EN590 Supply - Fujairah Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -22,6 +22,7 @@
                 <a href="#advantages">Advantages</a>
                 <a href="#product">Product</a>
                 <a href="#workflow">Workflow</a>
+                <a href="#" id="procedureLink">Procedure</a>
                 <a href="#contact">Contact</a>
             </nav>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
@@ -49,6 +50,14 @@
             </div>
             <div class="hero-tagline fade-in">
                 <span>Premium Diesel EN590 in Fujairah. Direct Volumes. No Broker Chains.</span>
+            </div>
+            <div class="hero-procedure fade-in">
+                <button class="btn btn-procedure" id="openProcedure">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Check out the Procedure
+                </button>
             </div>
         </div>
         <div class="scroll-indicator">
@@ -205,6 +214,25 @@
                     </div>
                 </div>
             </div>
+            <div class="workflow-cta fade-in">
+                <p class="workflow-cta-text">Want to see the full trading procedure from one of the diesel suppliers?</p>
+                <button class="btn-workflow-procedure" id="openProcedureWorkflow">
+                    <span class="btn-workflow-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </span>
+                    <span class="btn-workflow-content">
+                        <span class="btn-workflow-label">View Full Procedure</span>
+                        <span class="btn-workflow-sublabel">SCO Terms & Conditions</span>
+                    </span>
+                    <span class="btn-workflow-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </button>
+            </div>
         </div>
     </section>
 
@@ -289,6 +317,113 @@
             </div>
         </div>
     </footer>
+
+    <!-- Procedure Modal -->
+    <div class="modal-overlay" id="procedureModal">
+        <div class="modal-container">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-content">
+                <div class="modal-top-bar"></div>
+
+                <header class="modal-header">
+                    <div class="modal-brand">
+                        <h1>Geek<span>Traders</span></h1>
+                        <div class="modal-tagline">INTELLIGENT FUEL SUPPLY</div>
+                    </div>
+                    <div class="modal-meta">
+                        <div class="modal-doc-title">Soft Corporate Offer</div>
+                        <div>Ref: GT-SCO-EN590</div>
+                    </div>
+                </header>
+
+                <h2 class="modal-section-title">01. Commercial Terms</h2>
+                <div class="modal-specs-grid">
+                    <div class="modal-spec-item">
+                        <span class="modal-spec-label">Commodity</span>
+                        <span class="modal-spec-value">Diesel Gasoil EN590 (10 PPM)</span>
+                    </div>
+                    <div class="modal-spec-item">
+                        <span class="modal-spec-label">Origin</span>
+                        <span class="modal-spec-value">Kazakhstan</span>
+                    </div>
+                    <div class="modal-spec-item">
+                        <span class="modal-spec-label">Quantity</span>
+                        <span class="modal-spec-value">100,000 - 300,000 MT</span>
+                    </div>
+                    <div class="modal-spec-item">
+                        <span class="modal-spec-label">Incoterms</span>
+                        <span class="modal-spec-value modal-highlight">FOB</span>
+                    </div>
+                    <div class="modal-spec-item">
+                        <span class="modal-spec-label">Loading Ports</span>
+                        <span class="modal-spec-value">Houston, Rotterdam, Jurong, Fujairah</span>
+                    </div>
+                    <div class="modal-spec-item">
+                        <span class="modal-spec-label">Price</span>
+                        <span class="modal-spec-value">Platts Minus Discount (Gross/Net)</span>
+                    </div>
+                </div>
+
+                <h2 class="modal-section-title">02. Procedure: FOB TTV / TTT</h2>
+                <ol class="modal-procedure-list">
+                    <li>
+                        <strong>ICPO Issuance:</strong> Buyer issues an Irrevocable Corporate Purchase Order (ICPO) addressed to the Seller incorporating the Seller's procedures. Must include company details, banking details, and passport copy.
+                    </li>
+                    <li>
+                        <strong>Commercial Invoice (CI):</strong> Seller issues CI indicating available quantity and a Letter of Performance. Buyer signs and returns the CI.
+                    </li>
+                    <li>
+                        <strong>Financial Capability:</strong> Buyer issues a BCL via MT-199 or MT-799 within 3 days to confirm financial ability.
+                        <div class="modal-note">
+                            <strong>Notice:</strong> If MT-199/799 is not issued, Buyer may effect a Procurement Guarantee via MT103 to receive Authorization Letter and Access to tank. This amount is deductible.
+                        </div>
+                    </li>
+                    <li>
+                        <strong>Proof of Product (PPOP):</strong> Upon verification, Seller provides:
+                        <ul class="modal-doc-list">
+                            <li>Fresh SGS report (48-72h)</li>
+                            <li>Product Certificate of Quality</li>
+                            <li>Product Injection Report & Tank Receipt</li>
+                            <li>Authorization to Sell and Collect</li>
+                            <li>Unconditional Dip Test Authorization (DTA)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Injection:</strong> Buyer provides CPA or TSA. Transfer of product into buyer's nominated vessel or tank commences.
+                    </li>
+                    <li>
+                        <strong>Payment & Title:</strong> Upon completion of injection, Buyer makes full payment via MT103/TT within 1-2 banking days. Seller transfers Title of Ownership and export documents.
+                    </li>
+                    <li>
+                        <strong>Commissions:</strong> Seller pays intermediaries as per NCNDA/IMFPA.
+                    </li>
+                </ol>
+
+                <h2 class="modal-section-title">03. Procedure: Tank Take Over (TTO)</h2>
+                <ol class="modal-procedure-list">
+                    <li>Buyer issues ICPO with company details and banking profile.</li>
+                    <li>Seller sends Commercial Invoice and Letter of Performance. Buyer signs and returns.</li>
+                    <li>Seller provides Letter of Allocation Approval and Conditional Pre-Dip Test Approval.</li>
+                    <li>
+                        <strong>Tank Lease Transfer:</strong> Buyer makes payment for 3-5 days of tank storage to take over Seller's tank in VTTI. Tank lessee name changes to Buyer.
+                    </li>
+                    <li>Seller provides full Proof of Product (PPOP) and Unconditional Dip Test Authorization.</li>
+                    <li>Buyer conducts Dip Test for quality and quantity verification.</li>
+                    <li>Buyer makes full payment via MT103/TT within 1-2 banking days after successful TTO.</li>
+                    <li>Title of Ownership is transferred. Monthly deliveries commence.</li>
+                </ol>
+
+                <div class="modal-footer">
+                    <div>
+                        <strong>GeekTraders</strong><br>
+                        UAE, Dubai. Business Bay, 32 Marasi Drive Street<br>
+                        (THE BINARY BY OMNIYAT building), Office 1914-261<br>
+                        trading@gktraders.ae
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="assets/js/main.js"></script>
 </body>

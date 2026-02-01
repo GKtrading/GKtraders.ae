@@ -917,3 +917,450 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 0.875rem;
     }
 }
+
+/* --------------------------------------------------------------------------
+   Workflow CTA Button
+   -------------------------------------------------------------------------- */
+.workflow-cta {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.workflow-cta-text {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 24px;
+}
+
+.btn-workflow-procedure {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 30px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    text-align: left;
+}
+
+.btn-workflow-procedure:hover {
+    border-color: var(--color-accent);
+    background: var(--color-bg-tertiary);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+}
+
+.btn-workflow-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.btn-workflow-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--color-accent);
+}
+
+.btn-workflow-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.btn-workflow-label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.btn-workflow-sublabel {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.btn-workflow-arrow {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    margin-left: 10px;
+    transition: all var(--transition-medium);
+}
+
+.btn-workflow-arrow svg {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-muted);
+    transition: all var(--transition-medium);
+}
+
+.btn-workflow-procedure:hover .btn-workflow-arrow {
+    background: var(--color-accent);
+}
+
+.btn-workflow-procedure:hover .btn-workflow-arrow svg {
+    color: var(--color-bg-primary);
+    transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+    .btn-workflow-procedure {
+        width: 100%;
+        max-width: 400px;
+        padding: 16px 20px;
+        gap: 15px;
+    }
+
+    .btn-workflow-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .btn-workflow-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn-workflow-label {
+        font-size: 1rem;
+    }
+
+    .btn-workflow-arrow {
+        display: none;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Procedure Button
+   -------------------------------------------------------------------------- */
+.hero-procedure {
+    margin-top: 30px;
+}
+
+.btn-procedure {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: transparent;
+    border: 2px solid #38BDF8;
+    color: #38BDF8;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-procedure:hover {
+    background: #38BDF8;
+    color: var(--color-bg-primary);
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-procedure svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* --------------------------------------------------------------------------
+   Modal Styles
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 23, 0.95);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-container {
+    width: 100%;
+    max-width: 900px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: modalSlideIn 0.4s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #94A3B8;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: #38BDF8;
+    color: #0F172A;
+}
+
+.modal-content {
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, #38BDF8, #0EA5E9);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #334155;
+}
+
+.modal-brand h1 {
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -1px;
+    color: white;
+}
+
+.modal-brand h1 span {
+    color: #38BDF8;
+}
+
+.modal-tagline {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #94A3B8;
+    margin-top: 4px;
+}
+
+.modal-meta {
+    text-align: right;
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.modal-doc-title {
+    font-size: 14px;
+    color: #38BDF8;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-section-title {
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 16px;
+    color: white;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-section-title::before {
+    content: "//";
+    color: #38BDF8;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.modal-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    background: #0F172A;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+.modal-spec-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-spec-label {
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #94A3B8;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.modal-spec-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #F1F5F9;
+}
+
+.modal-highlight {
+    color: #38BDF8;
+}
+
+.modal-procedure-list {
+    counter-reset: item;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.modal-procedure-list > li {
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 20px;
+    color: #CBD5E1;
+    line-height: 1.7;
+}
+
+.modal-procedure-list > li::before {
+    content: counter(item, decimal-leading-zero);
+    counter-increment: item;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 14px;
+    color: #38BDF8;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+.modal-doc-list {
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 15px 15px 25px;
+    border-left: 2px solid #334155;
+    border-radius: 0 4px 4px 0;
+    list-style: none;
+}
+
+.modal-doc-list li {
+    font-size: 13px;
+    color: #94A3B8;
+    margin-bottom: 5px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.modal-doc-list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #38BDF8;
+    font-family: monospace;
+}
+
+.modal-note {
+    font-size: 13px;
+    color: #94A3B8;
+    background: rgba(56, 189, 248, 0.05);
+    padding: 10px 15px;
+    border-radius: 4px;
+    border-left: 3px solid #38BDF8;
+    margin-top: 10px;
+}
+
+.modal-footer {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid #334155;
+    font-size: 13px;
+    color: #94A3B8;
+    line-height: 1.8;
+}
+
+.modal-footer strong {
+    color: #F1F5F9;
+    font-size: 14px;
+}
+
+/* Modal Responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 40px 25px;
+    }
+
+    .modal-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .modal-meta {
+        text-align: left;
+    }
+
+    .modal-specs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-procedure-list > li {
+        padding-left: 35px;
+    }
+}
+
+/* Body scroll lock when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
