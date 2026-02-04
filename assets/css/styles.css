@@ -1364,3 +1364,167 @@ h1, h2, h3, h4, h5, h6 {
 body.modal-open {
     overflow: hidden;
 }
+
+/* --------------------------------------------------------------------------
+   Market Price Section
+   -------------------------------------------------------------------------- */
+.market-price {
+    padding: var(--section-padding) 0;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+}
+
+.market-price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.price-display {
+    display: flex;
+    justify-content: center;
+}
+
+.price-card {
+    background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-tertiary) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.price-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, #38bdf8 100%);
+}
+
+.price-label {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.price-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.price-currency {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.price-amount {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+}
+
+.price-unit {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.price-date {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+
+.price-source {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.price-info-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 20px;
+}
+
+.price-info-content p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+.price-info-content p strong {
+    color: var(--color-text-primary);
+}
+
+.price-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 30px 0;
+}
+
+.price-benefit {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--color-text-secondary);
+}
+
+.price-benefit svg {
+    width: 20px;
+    height: 20px;
+    color: #22c55e;
+    flex-shrink: 0;
+}
+
+/* Market Price Responsive */
+@media (max-width: 968px) {
+    .market-price-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .price-card {
+        padding: 30px 40px;
+    }
+
+    .price-amount {
+        font-size: 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .price-card {
+        padding: 25px 20px;
+    }
+
+    .price-amount {
+        font-size: 40px;
+    }
+
+    .price-currency {
+        font-size: 22px;
+    }
+
+    .price-unit {
+        font-size: 16px;
+    }
+}
