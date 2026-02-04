@@ -278,4 +278,39 @@ _Sent from GKtraders.ae_
         });
     }
 
+    // --------------------------------------------------------------------------
+    // Market Price Loader
+    // --------------------------------------------------------------------------
+    const priceAmountEl = document.querySelector('#marketPrice');
+    const priceDateEl = document.querySelector('#priceDate');
+
+    async function loadMarketPrice() {
+        if (!priceAmountEl || !priceDateEl) return;
+
+        try {
+            const response = await fetch('data/prices.json');
+            if (!response.ok) throw new Error('Failed to load price data');
+
+            const data = await response.json();
+
+            if (data.current && data.current.price) {
+                // Format price with 2 decimal places
+                const formattedPrice = data.current.price.toFixed(2);
+                priceAmountEl.textContent = formattedPrice;
+
+                // Format date
+                const date = new Date(data.current.date);
+                const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                priceDateEl.textContent = date.toLocaleDateString('en-US', options);
+            }
+        } catch (error) {
+            console.error('Error loading market price:', error);
+            priceAmountEl.textContent = '—';
+            priceDateEl.textContent = 'Unavailable';
+        }
+    }
+
+    // Load price on page load
+    loadMarketPrice();
+
 })();
