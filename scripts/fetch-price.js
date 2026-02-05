@@ -1,92 +1,80 @@
-const puppeteer = require('puppeteer');
+/**
+ * EN590/Gasoil Price Fetcher
+ * Uses Yahoo Finance API for Heating Oil futures (HO=F) as proxy for diesel prices
+ * Converts from USD/gallon to USD/metric ton
+ */
+
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const TRADINGVIEW_URL = 'https://www.tradingview.com/symbols/NYMEX-AGT1!/';
+const YAHOO_API_URL = 'https://query1.finance.yahoo.com/v8/finance/chart/HO=F';
 const DATA_FILE = path.join(__dirname, '..', 'data', 'prices.json');
+
+// Conversion: 1 metric ton of diesel ≈ 313.32 gallons
+const GALLONS_PER_MT = 313.32;
+
+function fetchFromYahoo() {
+    return new Promise((resolve, reject) => {
+        const options = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        };
+
+        https.get(YAHOO_API_URL, options, (res) => {
+            let data = '';
+
+            res.on('data', chunk => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+
+                    if (json.chart && json.chart.result && json.chart.result[0]) {
+                        const meta = json.chart.result[0].meta;
+                        const pricePerGallon = meta.regularMarketPrice;
+
+                        if (pricePerGallon) {
+                            resolve({
+                                pricePerGallon,
+                                currency: meta.currency,
+                                symbol: meta.symbol,
+                                exchange: meta.exchangeName
+                            });
+                        } else {
+                            reject(new Error('No price data in response'));
+                        }
+                    } else {
+                        reject(new Error('Invalid API response structure'));
+                    }
+                } catch (e) {
+                    reject(new Error(`Failed to parse response: ${e.message}`));
+                }
+            });
+
+        }).on('error', (e) => {
+            reject(new Error(`Request failed: ${e.message}`));
+        });
+    });
+}
 
 async function fetchPrice() {
     console.log('Starting price fetch...');
-    console.log(`URL: ${TRADINGVIEW_URL}`);
+    console.log('Source: Yahoo Finance API (Heating Oil Futures HO=F)');
 
-    let browser;
     try {
-        browser = await puppeteer.launch({
-            headless: 'new',
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--disable-gpu'
-            ]
-        });
+        const yahooData = await fetchFromYahoo();
 
-        const page = await browser.newPage();
+        console.log(`Raw price: $${yahooData.pricePerGallon}/gallon`);
 
-        // Set a realistic user agent
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        // Convert to price per metric ton
+        const pricePerMT = yahooData.pricePerGallon * GALLONS_PER_MT;
+        const roundedPrice = Math.round(pricePerMT * 100) / 100;
 
-        // Set viewport
-        await page.setViewport({ width: 1920, height: 1080 });
-
-        console.log('Navigating to TradingView...');
-        await page.goto(TRADINGVIEW_URL, {
-            waitUntil: 'networkidle2',
-            timeout: 60000
-        });
-
-        // Wait for price element to load
-        console.log('Waiting for price element...');
-        await page.waitForSelector('[class*="lastContainer"] [class*="last-"]', { timeout: 30000 });
-
-        // Extract the price - TradingView uses dynamic class names, so we look for patterns
-        const priceData = await page.evaluate(() => {
-            // Try multiple selectors as TradingView changes their structure
-            const selectors = [
-                '[class*="lastContainer"] [class*="last-"]',
-                '[data-name="legend-source-item"] [class*="value"]',
-                '.tv-symbol-price-quote__value',
-                '[class*="priceValue"]'
-            ];
-
-            for (const selector of selectors) {
-                const element = document.querySelector(selector);
-                if (element) {
-                    const text = element.textContent.trim();
-                    // Extract numeric value
-                    const match = text.match(/[\d,]+\.?\d*/);
-                    if (match) {
-                        return match[0].replace(/,/g, '');
-                    }
-                }
-            }
-
-            // Fallback: search for any element with a price-like value
-            const allElements = document.querySelectorAll('*');
-            for (const el of allElements) {
-                if (el.children.length === 0) {
-                    const text = el.textContent.trim();
-                    // Match price patterns like "692.50" or "1,234.56"
-                    if (/^[\d,]+\.\d{2}$/.test(text)) {
-                        const value = parseFloat(text.replace(/,/g, ''));
-                        // Reasonable range for gas oil futures (per metric ton)
-                        if (value > 100 && value < 2000) {
-                            return text.replace(/,/g, '');
-                        }
-                    }
-                }
-            }
-
-            return null;
-        });
-
-        if (!priceData) {
-            throw new Error('Could not extract price from page');
-        }
-
-        const price = parseFloat(priceData);
-        console.log(`Extracted price: $${price}`);
+        console.log(`Converted price: $${roundedPrice}/MT`);
 
         // Get current date in ISO format
         const today = new Date().toISOString().split('T')[0];
@@ -102,17 +90,18 @@ async function fetchPrice() {
         const existingTodayIndex = data.history.findIndex(entry => entry.date === today);
 
         const newEntry = {
-            price: price,
+            price: roundedPrice,
             date: today,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            source: 'Yahoo Finance HO=F',
+            rawPrice: yahooData.pricePerGallon,
+            rawUnit: 'USD/gallon'
         };
 
         if (existingTodayIndex !== -1) {
-            // Update today's entry
             data.history[existingTodayIndex] = newEntry;
             console.log('Updated existing entry for today');
         } else {
-            // Add new entry
             data.history.unshift(newEntry);
             console.log('Added new entry for today');
         }
@@ -126,20 +115,12 @@ async function fetchPrice() {
         // Write updated data
         fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
         console.log(`Data saved to ${DATA_FILE}`);
-
-        await browser.close();
         console.log('Price fetch completed successfully!');
 
-        return price;
+        return roundedPrice;
 
     } catch (error) {
         console.error('Error fetching price:', error.message);
-
-        if (browser) {
-            await browser.close();
-        }
-
-        // Exit with error code for GitHub Actions
         process.exit(1);
     }
 }
