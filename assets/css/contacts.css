@@ -456,6 +456,205 @@ body.page-contacts {
 }
 
 /* --------------------------------------------------------------------------
+   Lead gate (cold visitor flow)
+   -------------------------------------------------------------------------- */
+.lead-gate {
+    padding: 0 0 32px;
+}
+
+.lead-gate-card {
+    max-width: 520px;
+    margin: 0 auto;
+    background:
+        linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+        var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    padding: 32px 24px 28px;
+    text-align: center;
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 480px) {
+    .lead-gate-card { padding: 36px 32px 32px; }
+}
+
+.lead-gate-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    border-radius: 14px;
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lead-gate-icon svg { width: 28px; height: 28px; }
+
+.lead-gate-title {
+    font-size: clamp(1.5rem, 4vw, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+}
+
+.lead-gate-subtitle {
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+    margin: 0 0 24px;
+}
+
+.lead-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+}
+
+.lead-form-row {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 480px) {
+    .lead-form-row { grid-template-columns: 1fr 1fr; }
+}
+
+.lead-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lead-field-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.01em;
+}
+
+.lead-field-optional {
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+.lead-field input,
+.lead-field textarea {
+    width: 100%;
+    min-height: 56px;
+    padding: 14px 16px;
+    background: rgba(148, 163, 184, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.lead-field textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.lead-field input::placeholder,
+.lead-field textarea::placeholder {
+    color: var(--color-text-muted);
+}
+
+.lead-field input:focus,
+.lead-field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.06);
+}
+
+.lead-field input:focus-visible,
+.lead-field textarea:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 2px;
+}
+
+.lead-field input[aria-invalid="true"],
+.lead-field textarea[aria-invalid="true"] {
+    border-color: #f87171;
+    background: rgba(248, 113, 113, 0.06);
+}
+
+.lead-form-submit {
+    margin-top: 6px;
+}
+
+.lead-form-submit[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.lead-form-note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 6px 0 0;
+    text-align: center;
+}
+
+/* Locked card state — only shown when access is not granted */
+.biz-card-locked-hint {
+    display: none;
+    margin: 8px 0 0;
+    padding: 14px 16px;
+    background: rgba(148, 163, 184, 0.06);
+    border: 1px dashed var(--color-border-hover);
+    border-radius: 12px;
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.biz-card-locked-hint svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    vertical-align: -3px;
+    margin-right: 6px;
+    color: var(--color-text-muted);
+}
+
+.biz-card.is-locked .biz-card-locked-hint {
+    display: block;
+}
+
+/* When locked: hide the parts that contain personal contact data */
+.biz-card.is-locked > .biz-btn--primary,
+.biz-card.is-locked > .biz-card-section {
+    display: none;
+}
+
+/* Reveal animation when transitioning from locked → unlocked */
+@keyframes biz-card-unlock {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.biz-card.just-unlocked > .biz-btn--primary,
+.biz-card.just-unlocked > .biz-card-section {
+    animation: biz-card-unlock 0.35s ease both;
+}
+
+.biz-card.just-unlocked > .biz-card-section:nth-of-type(2) { animation-delay: 0.05s; }
+.biz-card.just-unlocked > .biz-card-section:nth-of-type(3) { animation-delay: 0.1s; }
+.biz-card.just-unlocked > .biz-card-section:nth-of-type(4) { animation-delay: 0.15s; }
+
+/* --------------------------------------------------------------------------
    Reduced motion
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
@@ -463,7 +662,11 @@ body.page-contacts {
     .biz-btn--primary,
     .skeleton-circle,
     .skeleton-line,
-    .toast {
+    .toast,
+    .lead-field input,
+    .lead-field textarea,
+    .biz-card.just-unlocked > .biz-btn--primary,
+    .biz-card.just-unlocked > .biz-card-section {
         transition: none;
         animation: none;
     }

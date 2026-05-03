@@ -1,12 +1,24 @@
 /**
  * GeekTraders — Digital Business Cards
  *
- * Loads team data, renders one card per member, and wires up:
- *   - Save Contact  (vCard 3.0 .vcf download with embedded photo)
+ * Behaviour:
+ *   - Shared URL with ?card=<id>           → cards fully unlocked (no form)
+ *   - Direct visit to /contacts.html       → lead gate: teaser cards + form
+ *   - After form submit, localStorage flag → cards stay unlocked in this browser
+ *
+ * Important: this is a static site. The gate is UX friction for lead capture,
+ * not a real authorisation boundary. Determined visitors can still inspect
+ * data/team.json directly.
+ *
+ * Card actions when unlocked:
+ *   - Save Contact (vCard 3.0 .vcf with embedded JPEG photo)
  *   - Direct contact (tel, mailto, wa.me, t.me)
- *   - Share this card (Web Share API + WhatsApp/Telegram intent + copy link)
+ *   - Share (Web Share API + WhatsApp/Telegram intent + copy link)
  *   - QR code (offline-friendly, generated client-side)
- *   - Yandex.Metrika goals for analytics
+ *
+ * Yandex.Metrika goals: card_view, card_locked_view, lead_submit,
+ *   lead_submit_success, lead_submit_error, cards_unlocked,
+ *   save_contact, share_native, share_whatsapp, share_telegram, share_copy
  */
 
 (function () {
@@ -14,12 +26,21 @@
 
     const METRIKA_ID = 106603064;
     const TEAM_URL = 'data/team.json';
+    const STORAGE_KEY = 'gk_cards_unlocked';
+
+    // Same Telegram bot/chat already exposed by index.html for SCO requests.
+    const TELEGRAM_BOT_TOKEN = '8572888070:AAG11DBzBOUeYpq-kIzfGosXrBI-r_QuR2Q';
+    const TELEGRAM_CHAT_ID = '-5276039618';
 
     const cardsContainer = document.getElementById('cardsContainer');
     const cardTemplate = document.getElementById('cardTemplate');
     const toastEl = document.getElementById('toast');
+    const leadGateEl = document.getElementById('leadGate');
+    const leadFormEl = document.getElementById('leadForm');
 
     if (!cardsContainer || !cardTemplate) return;
+
+    let members = [];
 
     /* --------------------------------------------------------------------
      * Helpers
@@ -52,9 +73,21 @@
         return url.toString();
     }
 
+    function safeStorage(op) {
+        try { return op(); } catch (e) { return null; }
+    }
+
+    function isUnlocked() {
+        if (getQueryParam('card')) return true;                                 // shared link
+        return safeStorage(() => localStorage.getItem(STORAGE_KEY)) === 'true'; // returning visitor
+    }
+
+    function persistUnlocked() {
+        safeStorage(() => localStorage.setItem(STORAGE_KEY, 'true'));
+    }
+
     /* --------------------------------------------------------------------
      * vCard 3.0 generation
-     * RFC 2426 / pragmatic compatibility for iOS, Android, Outlook, Gmail
      * ------------------------------------------------------------------ */
 
     function vEscape(value) {
@@ -65,7 +98,6 @@
             .replace(/;/g, '\\;');
     }
 
-    // RFC 6350 §3.2: fold at 75 octets, continuation lines start with a single space
     function foldLine(line) {
         if (line.length <= 75) return line;
         const out = [line.slice(0, 75)];
@@ -85,8 +117,7 @@
             const reader = new FileReader();
             reader.onerror = () => reject(reader.error);
             reader.onload = () => {
-                const dataUrl = reader.result;
-                const base64 = dataUrl.split(',')[1] || '';
+                const base64 = (reader.result || '').split(',')[1] || '';
                 resolve(base64);
             };
             reader.readAsDataURL(blob);
@@ -114,7 +145,6 @@
         if (member.languages && member.languages.length) noteParts.push('Languages: ' + member.languages.join(', '));
         if (noteParts.length) lines.push('NOTE:' + vEscape(noteParts.join(' | ')));
 
-        // Embed the photo (small thumbnail) so the contact card has the avatar after import.
         const photoUrl = member.photoEmbed || member.photo;
         if (photoUrl) {
             try {
@@ -123,7 +153,6 @@
                 const type = ext === 'PNG' ? 'PNG' : 'JPEG';
                 lines.push(foldLine('PHOTO;ENCODING=b;TYPE=' + type + ':' + base64));
             } catch (err) {
-                // Photo embed failed — vCard still valid without it.
                 console.warn('vCard photo embed skipped:', err);
             }
         }
@@ -149,36 +178,33 @@
      * Card rendering
      * ------------------------------------------------------------------ */
 
-    function renderCard(member) {
+    function renderCard(member, opts) {
+        opts = opts || {};
+        const locked = !!opts.locked;
+
         const node = cardTemplate.content.firstElementChild.cloneNode(true);
         node.dataset.cardId = member.id;
+        if (locked) node.classList.add('is-locked');
+        if (opts.justUnlocked) node.classList.add('just-unlocked');
 
-        const set = (sel, value) => {
-            const el = node.querySelector(sel);
-            if (el) el.textContent = value || '';
-        };
-        const setAttr = (sel, attr, value) => {
-            const el = node.querySelector(sel);
-            if (el) el.setAttribute(attr, value);
-        };
-
-        // Identity
+        // Identity (always rendered — minimum trust signal)
         const photo = node.querySelector('[data-photo]');
-        if (photo) {
-            photo.src = member.photo;
-            photo.alt = member.fullName;
-        }
-        set('[data-name]', member.fullName);
-        set('[data-role]', member.role || '');
-        set('[data-company]', member.company || '');
-
-        // Languages
+        if (photo) { photo.src = member.photo; photo.alt = member.fullName; }
+        node.querySelector('[data-name]').textContent = member.fullName;
+        node.querySelector('[data-role]').textContent = member.role || '';
+        node.querySelector('[data-company]').textContent = member.company || '';
         const langsEl = node.querySelector('[data-langs]');
         if (langsEl && member.languages && member.languages.length) {
             langsEl.innerHTML = member.languages.map(l => '<li>' + l + '</li>').join('');
         }
 
-        // Direct contact links
+        if (locked) {
+            // Stop here. CSS hides the rest. We deliberately do NOT write phone/
+            // email/Telegram/WhatsApp/LinkedIn/address into the DOM.
+            return node;
+        }
+
+        // Direct contact
         const callEl = node.querySelector('[data-call]');
         if (callEl) {
             callEl.href = 'tel:' + member.phone;
@@ -212,15 +238,14 @@
         if (member.address) {
             const a = member.address;
             const addressLine = [a.street, a.city, a.country].filter(Boolean).join(', ');
-            set('[data-address]', addressLine);
+            const addrEl = node.querySelector('[data-address]');
+            if (addrEl) addrEl.textContent = addressLine;
         }
 
-        // Share/copy URL
         const shareUrl = absoluteUrlForCard(member.id);
         const qrCaption = node.querySelector('[data-qr-url]');
         if (qrCaption) qrCaption.textContent = shareUrl.replace(/^https?:\/\//, '');
 
-        // Wire actions
         wireSave(node, member);
         wireShare(node, member, shareUrl);
         wireQR(node, shareUrl);
@@ -232,33 +257,27 @@
         const btn = node.querySelector('[data-save]');
         if (!btn) return;
         btn.addEventListener('click', async () => {
-            const original = btn.querySelector('span').textContent;
-            btn.querySelector('span').textContent = 'Preparing…';
+            const span = btn.querySelector('span');
+            const original = span.textContent;
+            span.textContent = 'Preparing…';
             btn.disabled = true;
             try {
                 const vcf = await buildVCard(member);
-                const filename = member.id + '.vcf';
-                downloadVCard(vcf, filename);
+                downloadVCard(vcf, member.id + '.vcf');
                 track('save_contact', { card_id: member.id });
-                btn.querySelector('span').textContent = 'Saved ✓';
-                setTimeout(() => {
-                    btn.querySelector('span').textContent = original;
-                    btn.disabled = false;
-                }, 2500);
+                span.textContent = 'Saved ✓';
+                setTimeout(() => { span.textContent = original; btn.disabled = false; }, 2500);
             } catch (err) {
                 console.error(err);
-                btn.querySelector('span').textContent = 'Try again';
-                setTimeout(() => {
-                    btn.querySelector('span').textContent = original;
-                    btn.disabled = false;
-                }, 2500);
+                span.textContent = 'Try again';
+                setTimeout(() => { span.textContent = original; btn.disabled = false; }, 2500);
             }
         });
     }
 
     function wireShare(node, member, shareUrl) {
         const shareTitle = member.fullName + ' · ' + (member.company || '');
-        const shareText = 'Contact card — ' + member.fullName + ' (' + (member.company || '') + ')';
+        const shareText  = 'Contact card — ' + member.fullName + ' (' + (member.company || '') + ')';
 
         const nativeBtn = node.querySelector('[data-share-native]');
         if (nativeBtn && navigator.share) {
@@ -283,7 +302,7 @@
         const tgShare = node.querySelector('[data-share-telegram]');
         if (tgShare) {
             tgShare.addEventListener('click', () => {
-                const url = encodeURIComponent(shareUrl);
+                const url  = encodeURIComponent(shareUrl);
                 const text = encodeURIComponent(shareText);
                 window.open('https://t.me/share/url?url=' + url + '&text=' + text, '_blank', 'noopener');
                 track('share_telegram', { card_id: member.id });
@@ -318,6 +337,129 @@
     }
 
     /* --------------------------------------------------------------------
+     * Page-level rendering
+     * ------------------------------------------------------------------ */
+
+    function renderAllCards(opts) {
+        opts = opts || {};
+        cardsContainer.innerHTML = '';
+        if (!members.length) {
+            cardsContainer.innerHTML = '<p class="biz-error">Card not found.</p>';
+            return;
+        }
+        members.forEach(m => {
+            cardsContainer.appendChild(renderCard(m, opts));
+            track(opts.locked ? 'card_locked_view' : 'card_view', { card_id: m.id });
+        });
+    }
+
+    function showLeadGate() { if (leadGateEl) leadGateEl.hidden = false; }
+
+    function hideLeadGate(animated) {
+        if (!leadGateEl) return;
+        if (!animated) { leadGateEl.hidden = true; return; }
+        leadGateEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease, max-height 0.4s ease';
+        leadGateEl.style.opacity = '0';
+        leadGateEl.style.transform = 'translateY(-8px)';
+        setTimeout(() => { leadGateEl.hidden = true; }, 320);
+    }
+
+    /* --------------------------------------------------------------------
+     * Lead form
+     * ------------------------------------------------------------------ */
+
+    async function postToTelegram(data, cardContext) {
+        const lines = [
+            '🔓 *Card Unlock Request*',
+            '',
+            '👤 *Name:* ' + data.name,
+            '🏢 *Company:* ' + data.company,
+            '📧 *Email:* ' + data.email,
+            data.phone   ? '📞 *Phone:* ' + data.phone     : null,
+            data.message ? '💬 *Message:* ' + data.message : null,
+            '',
+            '📇 *Looking at:* ' + cardContext,
+            '🔗 *Source:* ' + (document.referrer || window.location.href),
+            '',
+            '---',
+            '_Lead from gktraders.ae/contacts_'
+        ].filter(Boolean).join('\n');
+
+        const res = await fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: lines,
+                parse_mode: 'Markdown'
+            })
+        });
+        if (!res.ok) throw new Error('telegram api ' + res.status);
+    }
+
+    function wireLeadForm() {
+        if (!leadFormEl) return;
+        leadFormEl.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = leadFormEl.querySelector('[data-submit]');
+            const submitLabel = submitBtn.querySelector('span');
+            const originalLabel = submitLabel.textContent;
+
+            const data = Object.fromEntries(new FormData(leadFormEl).entries());
+            const required = ['name', 'company', 'email'];
+            let valid = true;
+            let firstInvalid = null;
+            required.forEach(f => {
+                const input = leadFormEl.querySelector('[name="' + f + '"]');
+                if (!input) return;
+                if (!data[f] || !data[f].trim()) {
+                    input.setAttribute('aria-invalid', 'true');
+                    if (!firstInvalid) firstInvalid = input;
+                    valid = false;
+                } else {
+                    input.removeAttribute('aria-invalid');
+                }
+            });
+            const emailInput = leadFormEl.querySelector('[name="email"]');
+            if (valid && emailInput && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+                emailInput.setAttribute('aria-invalid', 'true');
+                firstInvalid = emailInput;
+                valid = false;
+            }
+            if (!valid) {
+                showToast('Please complete the required fields');
+                if (firstInvalid) firstInvalid.focus();
+                return;
+            }
+
+            track('lead_submit');
+            submitLabel.textContent = 'Sending…';
+            submitBtn.disabled = true;
+
+            try {
+                const cardContext = members.length === 1
+                    ? members[0].fullName + ' (' + members[0].id + ')'
+                    : 'Trading Desk directory';
+                await postToTelegram(data, cardContext);
+                track('lead_submit_success');
+                persistUnlocked();
+                hideLeadGate(true);
+                renderAllCards({ locked: false, justUnlocked: true });
+                track('cards_unlocked');
+                showToast('Contacts unlocked. Welcome.');
+            } catch (err) {
+                console.error(err);
+                track('lead_submit_error');
+                submitLabel.textContent = 'Try again';
+                setTimeout(() => {
+                    submitLabel.textContent = originalLabel;
+                    submitBtn.disabled = false;
+                }, 3000);
+            }
+        });
+    }
+
+    /* --------------------------------------------------------------------
      * Boot
      * ------------------------------------------------------------------ */
 
@@ -334,20 +476,14 @@
         }
 
         const requestedId = getQueryParam('card');
-        const members = (team.members || []).filter(m => !requestedId || m.id === requestedId);
+        members = (team.members || []).filter(m => !requestedId || m.id === requestedId);
 
-        cardsContainer.innerHTML = '';
-        if (!members.length) {
-            cardsContainer.innerHTML = '<p class="biz-error">Card not found.</p>';
-            return;
-        }
+        const unlocked = isUnlocked();
+        if (!unlocked) showLeadGate();
 
-        members.forEach(m => {
-            cardsContainer.appendChild(renderCard(m));
-            track('card_view', { card_id: m.id });
-        });
+        renderAllCards({ locked: !unlocked });
+        wireLeadForm();
 
-        // If a single card was requested, update document title for share previews
         if (requestedId && members.length === 1) {
             const m = members[0];
             document.title = m.fullName + ' · ' + (m.company || 'GeekTraders');
