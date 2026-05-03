@@ -21,6 +21,28 @@
         "city": "Dubai",
         "country": "UAE"
       }
+    },
+    {
+      "id": "alexander-lemzakov",
+      "firstName": "Alexander",
+      "lastName": "Lemzakov",
+      "fullName": "Alexander Lemzakov",
+      "role": "",
+      "company": "GeekTraders",
+      "phone": "+971585942915",
+      "phoneDisplay": "+971 58 594 2915",
+      "whatsapp": "971585942915",
+      "telegram": "lemzakov",
+      "email": "alexander@gktraders.ae",
+      "linkedin": "https://www.linkedin.com/in/lemzakov",
+      "languages": ["EN", "RU"],
+      "photo": "assets/img/team/alexander.jpg",
+      "photoEmbed": "assets/img/team/alexander-thumb.jpg",
+      "address": {
+        "street": "i-Rise tower, Tecom 1208",
+        "city": "Dubai",
+        "country": "UAE"
+      }
     }
   ]
 }

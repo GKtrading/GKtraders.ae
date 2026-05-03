@@ -65,6 +65,51 @@
         </div>
     </section>
 
+    <!-- Lead gate (shown to cold visitors only; hidden when access is granted via shared link or prior submission) -->
+    <section class="lead-gate" id="leadGate" hidden>
+        <div class="container">
+            <div class="lead-gate-card">
+                <div class="lead-gate-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="4" y="11" width="16" height="10" rx="2"/>
+                        <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                    </svg>
+                </div>
+                <h2 class="lead-gate-title">Direct contacts on request</h2>
+                <p class="lead-gate-subtitle">Tell us who you are and we’ll unlock the trading desk’s direct numbers, WhatsApp and Telegram. Takes 20&nbsp;seconds.</p>
+
+                <form id="leadForm" class="lead-form" novalidate>
+                    <div class="lead-form-row">
+                        <label class="lead-field">
+                            <span class="lead-field-label">Your name</span>
+                            <input type="text" name="name" autocomplete="name" required placeholder="Full name">
+                        </label>
+                        <label class="lead-field">
+                            <span class="lead-field-label">Company</span>
+                            <input type="text" name="company" autocomplete="organization" required placeholder="Company name">
+                        </label>
+                    </div>
+                    <label class="lead-field">
+                        <span class="lead-field-label">Work email</span>
+                        <input type="email" name="email" autocomplete="email" required placeholder="you@company.com">
+                    </label>
+                    <label class="lead-field">
+                        <span class="lead-field-label">Phone <span class="lead-field-optional">(optional)</span></span>
+                        <input type="tel" name="phone" autocomplete="tel" placeholder="+971 ..">
+                    </label>
+                    <label class="lead-field">
+                        <span class="lead-field-label">What are you looking for? <span class="lead-field-optional">(optional)</span></span>
+                        <textarea name="message" rows="3" placeholder="Volume, port, timeline ..."></textarea>
+                    </label>
+                    <button type="submit" class="biz-btn biz-btn--primary lead-form-submit" data-submit>
+                        <span>Unlock contacts</span>
+                    </button>
+                    <p class="lead-form-note">By submitting you agree to be contacted by GeekTraders. We won’t share your data.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <!-- Cards container — populated by JS from data/team.json -->
     <main class="cards-wrap">
         <div class="container">
@@ -127,6 +172,14 @@
                     <ul class="biz-card-langs" data-langs></ul>
                 </div>
             </div>
+
+            <p class="biz-card-locked-hint" data-locked-hint>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="4" y="11" width="16" height="10" rx="2"/>
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+                Direct contacts hidden — fill the form above to unlock
+            </p>
 
             <button type="button" class="biz-btn biz-btn--primary" data-save>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
