@@ -1,0 +1,470 @@
+/* ==========================================================================
+   GeekTraders — Digital Business Cards
+   Designed for B2B oil & gas traders, optimized for users 50+:
+   - 18–20px body text, 32–44px headings
+   - 56–64px touch targets, generous spacing
+   - High-contrast labels (no icon-only buttons)
+   ========================================================================== */
+
+.page-contacts {
+    --card-radius: 24px;
+    --btn-radius: 14px;
+    --btn-height: 64px;
+    --btn-height-sm: 56px;
+    --gap-sm: 12px;
+    --gap-md: 16px;
+    --gap-lg: 24px;
+    --color-whatsapp: #25D366;
+    --color-telegram: #229ED9;
+}
+
+.page-contacts body,
+body.page-contacts {
+    background:
+        radial-gradient(1200px 600px at 50% -200px, rgba(59, 130, 246, 0.18), transparent 60%),
+        var(--color-bg-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+.contacts-hero {
+    padding: 140px 0 32px;
+    text-align: center;
+}
+
+.contacts-hero-title {
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+}
+
+.contacts-hero-subtitle {
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+    .contacts-hero { padding: 110px 0 24px; }
+    .contacts-hero-subtitle { font-size: 1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   Cards container
+   -------------------------------------------------------------------------- */
+.cards-wrap {
+    padding: 32px 0 96px;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Business Card
+   -------------------------------------------------------------------------- */
+.biz-card {
+    position: relative;
+    background:
+        linear-gradient(180deg, rgba(59, 130, 246, 0.06) 0%, transparent 30%),
+        var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    padding: 32px 24px 28px;
+    overflow: hidden;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 24px 48px -16px rgba(0, 0, 0, 0.45);
+}
+
+.biz-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, #60a5fa 50%, var(--color-accent) 100%);
+}
+
+@media (min-width: 480px) {
+    .biz-card { padding: 36px 32px 32px; }
+}
+
+/* Top: photo + identity */
+.biz-card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.biz-card-photo-wrap {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, #60a5fa 100%);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+    flex-shrink: 0;
+}
+
+.biz-card-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--color-bg-tertiary);
+    display: block;
+}
+
+.biz-card-id { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+
+.biz-card-name {
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.biz-card-role {
+    font-size: 1.0625rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    font-weight: 500;
+}
+
+.biz-card-role:empty { display: none; }
+
+.biz-card-company {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    font-weight: 500;
+}
+
+.biz-card-langs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4px;
+    padding: 0;
+    list-style: none;
+}
+
+.biz-card-langs li {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.biz-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    min-height: var(--btn-height);
+    padding: 12px 20px;
+    border: 1px solid transparent;
+    border-radius: var(--btn-radius);
+    font-family: inherit;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.biz-btn:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 3px;
+}
+
+.biz-btn svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.biz-btn:active { transform: translateY(1px); }
+
+/* Primary: Save Contact */
+.biz-btn--primary {
+    background: linear-gradient(135deg, var(--color-accent) 0%, #2563eb 100%);
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: 700;
+    box-shadow:
+        0 4px 12px rgba(59, 130, 246, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+
+.biz-btn--primary:hover {
+    box-shadow:
+        0 6px 20px rgba(59, 130, 246, 0.55),
+        0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    transform: translateY(-1px);
+}
+
+.biz-btn--primary svg { width: 24px; height: 24px; }
+
+/* Ghost: 4-up grid items */
+.biz-btn--ghost {
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    min-height: 96px;
+    padding: 14px 10px;
+    background: rgba(148, 163, 184, 0.05);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.biz-btn--ghost:hover {
+    background: rgba(148, 163, 184, 0.1);
+    border-color: var(--color-border-hover);
+}
+
+.biz-btn--ghost svg { width: 26px; height: 26px; color: var(--color-text-primary); }
+
+.biz-btn-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.biz-btn-sub {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    line-height: 1.2;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.biz-btn--whatsapp svg { color: var(--color-whatsapp); }
+.biz-btn--telegram svg { color: var(--color-telegram); }
+
+.biz-btn--whatsapp:hover { border-color: rgba(37, 211, 102, 0.5); background: rgba(37, 211, 102, 0.08); }
+.biz-btn--telegram:hover { border-color: rgba(34, 158, 217, 0.5); background: rgba(34, 158, 217, 0.08); }
+
+/* Share buttons (3-grid): horizontal layout, smaller */
+.biz-card-section--share .biz-btn--ghost {
+    flex-direction: row;
+    min-height: var(--btn-height-sm);
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.biz-card-section--share .biz-btn--ghost svg { width: 20px; height: 20px; }
+.biz-card-section--share .biz-btn-label { font-size: 0.9375rem; }
+
+/* --------------------------------------------------------------------------
+   Sections
+   -------------------------------------------------------------------------- */
+.biz-card-section {
+    margin-top: 24px;
+}
+
+.biz-card-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0 0 14px;
+    text-align: center;
+}
+
+.biz-grid {
+    display: grid;
+    gap: var(--gap-sm);
+}
+
+.biz-grid--4 { grid-template-columns: repeat(2, 1fr); }
+.biz-grid--3 { grid-template-columns: 1fr; }
+
+@media (min-width: 480px) {
+    .biz-grid--4 { grid-template-columns: repeat(4, 1fr); }
+    /* auto-fit handles both 3-button (no Web Share) and 4-button cases gracefully */
+    .biz-grid--3 { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+
+/* --------------------------------------------------------------------------
+   QR
+   -------------------------------------------------------------------------- */
+.biz-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.biz-qr-canvas {
+    width: 188px;
+    height: 188px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.biz-qr-canvas img,
+.biz-qr-canvas canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.biz-qr-caption {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    word-break: break-all;
+    max-width: 320px;
+    text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Extras: LinkedIn link, address
+   -------------------------------------------------------------------------- */
+.biz-card-extras {
+    border-top: 1px solid var(--color-border);
+    padding-top: 20px;
+    text-align: center;
+}
+
+.biz-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.biz-link:hover { color: var(--color-accent); }
+.biz-link svg { width: 18px; height: 18px; color: #0A66C2; }
+
+.biz-card-address {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 6px 0 0;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Skeleton
+   -------------------------------------------------------------------------- */
+.card-skeleton {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.skeleton-circle {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.1);
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line {
+    height: 16px;
+    border-radius: 8px;
+    background: rgba(148, 163, 184, 0.1);
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line--lg { width: 60%; height: 28px; }
+.skeleton-line--md { width: 45%; }
+.skeleton-line--sm { width: 30%; }
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   Toast
+   -------------------------------------------------------------------------- */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 32px;
+    transform: translate(-50%, 16px);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-hover);
+    color: var(--color-text-primary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+    max-width: calc(100vw - 32px);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .biz-btn,
+    .biz-btn--primary,
+    .skeleton-circle,
+    .skeleton-line,
+    .toast {
+        transition: none;
+        animation: none;
+    }
+}

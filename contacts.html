@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GeekTraders Trading Desk — direct contacts. Save the card, message us on WhatsApp or Telegram, or scan the QR.">
+    <title>Contacts | GeekTraders</title>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/contacts.css">
+
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="GeekTraders Trading Desk — Direct Contacts">
+    <meta property="og:description" content="Save the card, message on WhatsApp or Telegram, or scan the QR.">
+    <meta property="og:image" content="assets/img/team/ilia.jpg">
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106603064', 'ym');
+
+        ym(106603064, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/106603064" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+</head>
+<body class="page-contacts">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-geek">Geek</span><span class="logo-global">Traders</span>
+            </a>
+            <nav class="nav" id="nav">
+                <a href="index.html#clients">Clients</a>
+                <a href="index.html#advantages">Advantages</a>
+                <a href="index.html#product">Product</a>
+                <a href="index.html#workflow">Workflow</a>
+                <a href="index.html#market-price">Market Price</a>
+                <a href="contacts.html" class="active">Contacts</a>
+            </nav>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="contacts-hero">
+        <div class="container">
+            <h1 class="contacts-hero-title">Trading Desk</h1>
+            <p class="contacts-hero-subtitle">Save the card to your phone in one tap. Message us on WhatsApp or Telegram. Or scan the QR from another device.</p>
+        </div>
+    </section>
+
+    <!-- Cards container — populated by JS from data/team.json -->
+    <main class="cards-wrap">
+        <div class="container">
+            <div id="cardsContainer" class="cards-container" aria-live="polite">
+                <div class="card-skeleton" aria-label="Loading contact card">
+                    <div class="skeleton-circle"></div>
+                    <div class="skeleton-line skeleton-line--lg"></div>
+                    <div class="skeleton-line skeleton-line--md"></div>
+                    <div class="skeleton-line skeleton-line--sm"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast for "Link copied" etc. -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-geek">Geek</span><span class="logo-global">Traders</span>
+                    </a>
+                    <p>Premium Diesel EN590 supply. Direct volumes. No broker chains.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="index.html#clients">Clients</a>
+                    <a href="index.html#advantages">Advantages</a>
+                    <a href="index.html#product">Product</a>
+                    <a href="index.html#workflow">Workflow</a>
+                    <a href="contacts.html">Contacts</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Compliance</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 GeekTraders. All rights reserved. · Proudly made in Dubai, UAE 🇦🇪</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Card template -->
+    <template id="cardTemplate">
+        <article class="biz-card" data-card>
+            <div class="biz-card-top">
+                <div class="biz-card-photo-wrap">
+                    <img class="biz-card-photo" alt="" data-photo>
+                </div>
+                <div class="biz-card-id">
+                    <h2 class="biz-card-name" data-name></h2>
+                    <p class="biz-card-role" data-role></p>
+                    <p class="biz-card-company" data-company></p>
+                    <ul class="biz-card-langs" data-langs></ul>
+                </div>
+            </div>
+
+            <button type="button" class="biz-btn biz-btn--primary" data-save>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                <span>Save to Contacts</span>
+            </button>
+
+            <div class="biz-card-section">
+                <p class="biz-card-section-label">Reach me directly</p>
+                <div class="biz-grid biz-grid--4">
+                    <a class="biz-btn biz-btn--ghost" data-call>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <span class="biz-btn-label">Call</span>
+                        <span class="biz-btn-sub" data-phone-display></span>
+                    </a>
+                    <a class="biz-btn biz-btn--ghost biz-btn--whatsapp" data-whatsapp target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/>
+                        </svg>
+                        <span class="biz-btn-label">WhatsApp</span>
+                        <span class="biz-btn-sub">Chat now</span>
+                    </a>
+                    <a class="biz-btn biz-btn--ghost biz-btn--telegram" data-telegram target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.464.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        <span class="biz-btn-label">Telegram</span>
+                        <span class="biz-btn-sub" data-telegram-handle></span>
+                    </a>
+                    <a class="biz-btn biz-btn--ghost" data-email>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <span class="biz-btn-label">Email</span>
+                        <span class="biz-btn-sub" data-email-display></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="biz-card-section biz-card-section--share">
+                <p class="biz-card-section-label">Share this card</p>
+                <div class="biz-grid biz-grid--3">
+                    <button type="button" class="biz-btn biz-btn--ghost" data-share-native hidden>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                            <polyline points="16 6 12 2 8 6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                        </svg>
+                        <span class="biz-btn-label">Share…</span>
+                    </button>
+                    <button type="button" class="biz-btn biz-btn--ghost" data-share-whatsapp>
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/>
+                        </svg>
+                        <span class="biz-btn-label">Send in WhatsApp</span>
+                    </button>
+                    <button type="button" class="biz-btn biz-btn--ghost" data-share-telegram>
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.464.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        <span class="biz-btn-label">Send in Telegram</span>
+                    </button>
+                    <button type="button" class="biz-btn biz-btn--ghost" data-copy>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        <span class="biz-btn-label">Copy link</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="biz-card-section biz-card-section--qr">
+                <p class="biz-card-section-label">Or scan from another phone</p>
+                <div class="biz-qr">
+                    <div class="biz-qr-canvas" data-qr></div>
+                    <p class="biz-qr-caption" data-qr-url></p>
+                </div>
+            </div>
+
+            <div class="biz-card-section biz-card-extras">
+                <a class="biz-link" data-linkedin target="_blank" rel="noopener" hidden>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <span data-linkedin-label></span>
+                </a>
+                <p class="biz-card-address" data-address></p>
+            </div>
+        </article>
+    </template>
+
+    <script src="assets/js/qrcode.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/contacts.js"></script>
+</body>
+</html>
