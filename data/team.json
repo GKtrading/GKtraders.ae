@@ -1,0 +1,26 @@
+{
+  "members": [
+    {
+      "id": "ilia-sergeenko",
+      "firstName": "Ilia",
+      "lastName": "Sergeenko",
+      "fullName": "Ilia Sergeenko",
+      "role": "",
+      "company": "GeekTraders",
+      "phone": "+971585272280",
+      "phoneDisplay": "+971 58 527 2280",
+      "whatsapp": "971585272280",
+      "telegram": "aylisrg",
+      "email": "ilia@gktraders.ae",
+      "linkedin": "https://www.linkedin.com/in/aylis/",
+      "languages": ["EN", "RU", "AR"],
+      "photo": "assets/img/team/ilia.jpg",
+      "photoEmbed": "assets/img/team/ilia-thumb.jpg",
+      "address": {
+        "street": "i-Rise tower, Tecom 1208",
+        "city": "Dubai",
+        "country": "UAE"
+      }
+    }
+  ]
+}
