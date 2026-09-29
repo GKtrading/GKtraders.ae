@@ -1,13 +1,21 @@
 {
   "current": {
-    "price": 1393.52,
-    "date": "2026-09-28",
-    "timestamp": "2026-09-28T16:40:04.357Z",
+    "price": 1381.52,
+    "date": "2026-09-29",
+    "timestamp": "2026-09-29T14:45:44.349Z",
     "source": "Yahoo Finance HO=F",
-    "rawPrice": 4.4476,
+    "rawPrice": 4.4093,
     "rawUnit": "USD/gallon"
   },
   "history": [
+    {
+      "price": 1381.52,
+      "date": "2026-09-29",
+      "timestamp": "2026-09-29T14:45:44.349Z",
+      "source": "Yahoo Finance HO=F",
+      "rawPrice": 4.4093,
+      "rawUnit": "USD/gallon"
+    },
     {
       "price": 1393.52,
       "date": "2026-09-28",
